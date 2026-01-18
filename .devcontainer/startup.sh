@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Auto-injected JWT_PUBLIC_KEY for WebSocket authentication
+export JWT_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy91pu9jzUYvf/PiosFst
+Muo43foMgblDKQ+0hRh1IQerajvgIHgzP8RPne8LyqUi4iec/ffhph77nAtUumWs
+n3c2MCyFBOpf8h2vHOUepRZLQkf6Rt1S/1whRNmEmfNwABoNo7MFYPDhxdTbeplE
+8II0Q1w3xyFNbOjPpd5te/LSOk9fboUduc6JJIr0BngdxosHCIzeQLPlnyzexj6j
+s5rpEfRqoXkwPRtaB//j1fPNsUkzu7Dh+bn6WD5jw9kZ0KzjDzncfWvKTV52ynuG
+42cZs3NV67pqnhrxuaONujiF3mYfDa1EMkUMQ5Vv8cMHiwsTAx/4lf5eXyPVnRkn
+oQIDAQAB
+-----END PUBLIC KEY-----
+"
+
 # PhantomWP Infrastructure Version
 PHANTOMWP_INFRA_VERSION="1.1.0"
 
