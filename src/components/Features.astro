@@ -1,0 +1,98 @@
+---
+import Feature from './Feature.astro';
+import { Sparkles, ArrowRight } from 'lucide-astro';
+
+const features = [
+  {
+    title: "Content Management",
+    description: "Easily manage your content with Markdown and MDX support. Write in your favorite format with full flexibility.",
+    iconName: "FileText",
+    badge: "Markdown & MDX"
+  },
+  {
+    title: "Modern Styling",
+    description: "Built with Tailwind CSS v4. Customize colors, spacing, and create beautiful designs with ease.",
+    iconName: "Palette",
+    badge: "Tailwind CSS"
+  },
+  {
+    title: "Blazing Performance",
+    description: "Zero JavaScript by default. Ship minimal code, load instantly, and rank higher in search results.",
+    iconName: "Zap",
+    badge: "100/100 Lighthouse"
+  },
+  {
+    title: "Component Library",
+    description: "Pre-built, customizable components ready to use. Headers, footers, cards, and more included.",
+    iconName: "LayoutGrid",
+    badge: "Plug & Play"
+  },
+  {
+    title: "SEO Optimized",
+    description: "Built-in SEO best practices. Meta tags, sitemaps, Open Graph, and semantic HTML included.",
+    iconName: "Globe",
+    badge: "Search Ready"
+  },
+  {
+    title: "Easy Deployment",
+    description: "Deploy to Vercel, Netlify, Cloudflare Pages, or any platform with one click.",
+    iconName: "Cloud",
+    badge: "Global CDN"
+  }
+];
+---
+
+<section id="features" class="relative py-28 md:py-36 bg-surface-alt overflow-hidden">
+    <!-- Background Elements -->
+    <div class="absolute inset-0 bg-gradient-to-b from-surface via-surface-alt to-surface"></div>
+    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-outline to-transparent"></div>
+    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-outline to-transparent"></div>
+    
+    <!-- Decorative Blurs -->
+    <div class="absolute top-1/4 -left-48 w-96 h-96 bg-primary/5 rounded-full blur-[100px]"></div>
+    <div class="absolute bottom-1/4 -right-48 w-96 h-96 bg-primary-light/5 rounded-full blur-[100px]"></div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <!-- Section Header -->
+            <div class="text-center mb-20">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-semibold mb-6">
+                    <Sparkles class="w-4 h-4" />
+                    <span>Features</span>
+                </div>
+                <h2 class="text-4xl sm:text-5xl md:text-6xl font-black mb-6 text-content tracking-tight">
+                    Everything You Need
+                </h2>
+                <p class="text-lg md:text-xl text-content-light max-w-2xl mx-auto leading-relaxed">
+                    Start building with a solid foundation. Modern tools, best practices, and beautiful design out of the box.
+                </p>
+            </div>
+            
+            <!-- Feature Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                {features.map((feature) => (
+                    <Feature
+                        title={feature.title}
+                        description={feature.description}
+                        iconName={feature.iconName}
+                        badge={feature.badge}
+                    />
+                ))}
+            </div>
+            
+            <!-- Bottom CTA -->
+            <div class="mt-20 text-center">
+                <p class="text-content-light mb-6">Ready to start building?</p>
+                <a 
+                    href="https://docs.astro.build" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-4 transition-all duration-300 cursor-pointer"
+                >
+                    <span>Explore the documentation</span>
+                    <ArrowRight class="w-5 h-5" />
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

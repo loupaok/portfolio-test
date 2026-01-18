@@ -1,0 +1,27 @@
+/*
+ * ============================================================
+ * THEME CHILD - Your Custom Overrides
+ * ============================================================
+ * 
+ * This file is for YOUR custom theme overrides.
+ * It will NOT be overwritten by the Token Designer.
+ * 
+ * IMPORTANT: Use @theme { } to define colors for Tailwind autocomplete!
+ * This creates utility classes like: bg-mycolor, text-mycolor, border-mycolor
+ * 
+ * ============================================================
+ */
+
+/* 
+ * Override existing theme colors or add new ones:
+ * 
+ * @theme {
+ *   --color-primary: #your-custom-color;
+ *   --color-brand: #ff6b6b;
+ *   --color-highlight: #ffd93d;
+ * }
+ * 
+ * Then use: bg-brand, text-highlight, border-primary, etc.
+ */
+
+/* Add your custom theme overrides below */

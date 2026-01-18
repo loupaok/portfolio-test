@@ -1,0 +1,157 @@
+---
+import '../styles/global.css';
+import CustomScripts from '../components/CustomScripts.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  canonicalUrl?: string;
+  robots?: string[];
+  openGraph?: {
+    title?: string;
+    description?: string;
+    image?: string;
+    type?: string;
+  };
+  twitter?: {
+    title?: string;
+    description?: string;
+    image?: string;
+    card?: string;
+  };
+}
+
+const { 
+  title, 
+  description = 'A modern Astro site migrated from WordPress',
+  image,
+  canonicalUrl,
+  robots,
+  openGraph,
+  twitter,
+} = Astro.props;
+
+// Prepare meta values with fallbacks
+const ogTitle = openGraph?.title || title;
+const ogDescription = openGraph?.description || description;
+const ogImage = openGraph?.image || image;
+const ogType = openGraph?.type || 'website';
+
+const twitterTitle = twitter?.title || title;
+const twitterDescription = twitter?.description || description;
+const twitterImage = twitter?.image || image;
+const twitterCard = twitter?.card || 'summary_large_image';
+
+// Build robots meta content
+const robotsContent = robots && robots.length > 0 ? robots.join(', ') : 'index, follow';
+
+// Get canonical URL - use provided or current URL
+const canonical = canonicalUrl || Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="robots" content={robotsContent} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content={twitterCard} />
+    <meta name="twitter:url" content={Astro.url} />
+    <meta name="twitter:title" content={twitterTitle} />
+    <meta name="twitter:description" content={twitterDescription} />
+    {twitterImage && <meta name="twitter:image" content={twitterImage} />}
+    
+    <style is:global>
+      /* Thin dark scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: var(--color-content-lighter);
+        border-radius: 3px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-content-light);
+      }
+      
+      /* Firefox */
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-content-lighter) transparent;
+      }
+    </style>
+    <slot name="head" />
+    <CustomScripts />
+  </head>
+  <body class="antialiased bg-surface text-content">
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-dark">
+      Skip to main content
+    </a>
+    <slot />
+    
+    {/* Development-only navigation helper for IDE preview */}
+    {import.meta.env.DEV && (
+      <script is:inline>
+        (function() {
+          // Notify parent when navigation starts (link click)
+          document.addEventListener('click', function(e) {
+            var target = e.target;
+            while (target && target.tagName !== 'A') {
+              target = target.parentElement;
+            }
+            if (target && target.tagName === 'A') {
+              var href = target.getAttribute('href');
+              // Only notify for internal navigation (not external links or anchors)
+              if (href && !href.startsWith('#') && !href.startsWith('http') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+                window.parent.postMessage({
+                  type: 'iframe-navigation-start',
+                  url: href,
+                }, '*');
+              }
+            }
+          });
+          
+          // Notify parent when page finishes loading
+          window.addEventListener('load', function() {
+            window.parent.postMessage({
+              type: 'iframe-navigation',
+              url: window.location.href,
+            }, '*');
+          });
+          
+          // Also notify on popstate (back/forward navigation)
+          window.addEventListener('popstate', function() {
+            // Notify start immediately
+            window.parent.postMessage({
+              type: 'iframe-navigation-start',
+              url: window.location.href,
+            }, '*');
+          });
+        })();
+      </script>
+    )}
+  </body>
+</html>

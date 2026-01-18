@@ -1,0 +1,9 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemap location (if you generate one)
+# Sitemap: https://yoursite.com/sitemap.xml

@@ -1,0 +1,17 @@
+{
+  "menus": [
+    {
+      "id": "main_default",
+      "name": "Main",
+      "slug": "main",
+      "items": [],
+      "style": "horizontal",
+      "showHome": true,
+      "mobileHamburger": true,
+      "autoSync": true,
+      "excludedPages": []
+    }
+  ],
+  "excludedPages": [],
+  "activeMenuId": "main_default"
+}

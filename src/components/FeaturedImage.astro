@@ -1,0 +1,114 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: string | ImageMetadata | null | undefined;
+  alt: string;
+  class?: string;
+  priority?: boolean;
+  width?: number;
+  height?: number;
+}
+
+const { 
+  src, 
+  alt, 
+  class: className = 'w-full h-auto rounded-lg',
+  priority = false,
+  width = 1200,
+  height = 630,
+} = Astro.props;
+
+if (!src) return null;
+
+// Already imported ImageMetadata
+const isImported = typeof src === 'object' && 'src' in src;
+
+// Remote URL
+const isRemote = typeof src === 'string' && src.startsWith('http');
+
+// Glob all images in src/media - official Astro pattern
+// Includes both /src/media/ (user images) and /src/media/cms/ (WordPress imports)
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/media/**/*.{jpeg,jpg,png,gif,webp,avif,svg}'
+);
+
+// Build lookup path for local images
+let imagePath: string | null = null;
+let resolvedImage: ImageMetadata | null = null;
+
+if (!isImported && !isRemote && typeof src === 'string') {
+  const filename = src.split('/').pop() || '';
+  // Get base filename without extension (for matching across formats)
+  const baseFilename = filename.replace(/\.[^.]+$/, '').toLowerCase();
+  
+  // Check if path is already specified
+  if (src.startsWith('/src/media/')) {
+    imagePath = src;
+  } else if (src.startsWith('src/media/')) {
+    imagePath = '/' + src;
+  } else {
+    // Try to find by base filename in src/media/cms/ or src/media/
+    // This handles cases where public/ has .webp but src/ has .jpg/.png
+    for (const path of Object.keys(images)) {
+      const pathFilename = path.split('/').pop() || '';
+      const pathBase = pathFilename.replace(/\.[^.]+$/, '').toLowerCase();
+      if (pathBase === baseFilename) {
+        imagePath = path;
+        break;
+      }
+    }
+  }
+  
+  // Resolve the dynamic import - MUST await and access .default
+  if (imagePath && images[imagePath]) {
+    const imageModule = await images[imagePath]();
+    resolvedImage = imageModule.default;
+  }
+}
+---
+
+{isImported ? (
+  <Image 
+    src={src as ImageMetadata}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={priority ? 'eager' : 'lazy'}
+    class={className}
+    quality={80}
+    format="webp"
+  />
+) : isRemote ? (
+  <Image 
+    src={src as string}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={priority ? 'eager' : 'lazy'}
+    class={className}
+    quality={80}
+    format="webp"
+  />
+) : resolvedImage ? (
+  <Image 
+    src={resolvedImage}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={priority ? 'eager' : 'lazy'}
+    class={className}
+    quality={80}
+    format="webp"
+  />
+) : (
+  <img 
+    src={typeof src === 'string' ? src : ''}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={priority ? 'eager' : 'lazy'}
+    class={className}
+  />
+)}

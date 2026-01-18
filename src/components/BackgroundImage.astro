@@ -1,0 +1,59 @@
+---
+interface Props {
+  src: string;
+  class?: string;
+  position?: 'center' | 'top' | 'bottom' | 'left' | 'right';
+  size?: 'cover' | 'contain' | 'auto';
+  repeat?: 'no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y';
+  overlay?: string;
+}
+
+const { 
+  src, 
+  class: className = '',
+  position = 'center',
+  size = 'cover',
+  repeat = 'no-repeat',
+  overlay,
+} = Astro.props;
+
+// Convert local paths to proper URL paths
+let imageUrl = src;
+if (!src.startsWith('http://') && !src.startsWith('https://')) {
+  if (src.startsWith('src/')) {
+    imageUrl = '/' + src;
+  } else if (!src.startsWith('/')) {
+    imageUrl = '/src/media/' + src;
+  }
+}
+
+// Build background position class
+const positionMap = {
+  center: 'bg-center',
+  top: 'bg-top',
+  bottom: 'bg-bottom',
+  left: 'bg-left',
+  right: 'bg-right',
+};
+
+// Build background size class
+const sizeMap = {
+  cover: 'bg-cover',
+  contain: 'bg-contain',
+  auto: 'bg-auto',
+};
+
+const bgClasses = `${positionMap[position]} ${sizeMap[size]} bg-${repeat}`;
+---
+
+<div 
+  class={`relative ${bgClasses} ${className}`}
+  style={`background-image: url('${imageUrl}')`}
+>
+  {overlay && (
+    <div class={`absolute inset-0 ${overlay}`}></div>
+  )}
+  <div class="relative z-10">
+    <slot />
+  </div>
+</div>

@@ -1,0 +1,56 @@
+---
+import { FileText, Palette, Zap, LayoutGrid, Globe, Cloud, ArrowRight } from 'lucide-astro';
+
+interface Props {
+  title: string;
+  description: string;
+  iconName: string;
+  badge?: string;
+}
+
+const { title, description, iconName, badge } = Astro.props;
+
+const icons: Record<string, any> = {
+  FileText,
+  Palette,
+  Zap,
+  LayoutGrid,
+  Globe,
+  Cloud,
+};
+
+const IconComponent = icons[iconName] || Zap;
+---
+
+<article class="group relative h-full">
+    <!-- Hover Glow Effect -->
+    <div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-primary-light rounded-3xl opacity-0 group-hover:opacity-20 blur transition-all duration-500"></div>
+    
+    <!-- Card -->
+    <div class="relative h-full p-8 bg-surface rounded-2xl border border-outline/50 hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-1">
+        <!-- Icon -->
+        <div class="relative mb-6">
+            <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary-light/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="relative flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl border border-primary/10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                <IconComponent class="w-7 h-7 text-primary" />
+            </div>
+        </div>
+        
+        <!-- Content -->
+        <h3 class="text-xl font-bold mb-3 text-content group-hover:text-primary transition-colors duration-300">{title}</h3>
+        <p class="text-content-light leading-relaxed mb-5">{description}</p>
+        
+        <!-- Badge -->
+        {badge && (
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/5 rounded-full border border-primary/10 group-hover:bg-primary/10 group-hover:border-primary/20 transition-all duration-300">
+                <span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                <span class="text-sm font-medium text-primary">{badge}</span>
+            </div>
+        )}
+        
+        <!-- Arrow indicator on hover -->
+        <div class="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+            <ArrowRight class="w-5 h-5 text-primary" />
+        </div>
+    </div>
+</article>
