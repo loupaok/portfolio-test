@@ -1,0 +1,33 @@
+---
+import { getTags } from '../../lib/wordpress';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const tags = await getTags();
+const nonEmptyTags = tags.filter(tag => tag.count > 0);
+---
+
+<BaseLayout title="Tags">
+  <Header />
+  <main id="main-content" class="container mx-auto px-4 py-8 bg-surface">
+    <h1 class="text-4xl font-bold mb-8 text-content">Tags</h1>
+    
+    <div class="flex flex-wrap gap-3">
+      {nonEmptyTags.map(tag => (
+        <a 
+          href={`/tag/${tag.slug}`} 
+          class="inline-flex items-center gap-2 px-4 py-2 bg-surface rounded-full shadow-md border border-outline hover:shadow-lg transition-shadow cursor-pointer"
+        >
+          <span class="font-medium text-content">#{tag.name}</span>
+          <span class="text-content-lighter text-sm">({tag.count})</span>
+        </a>
+      ))}
+    </div>
+    
+    {nonEmptyTags.length === 0 && (
+      <p class="text-content-lighter text-center py-12">No tags found.</p>
+    )}
+  </main>
+  <Footer />
+</BaseLayout>

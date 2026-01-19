@@ -1,0 +1,50 @@
+---
+import { getAllPages, getPage, getLocalFeaturedImageUrl, rewriteContentUrls } from '../lib/wordpress';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FeaturedImage from '../components/FeaturedImage.astro';
+
+export async function getStaticPaths() {
+  const pages = await getAllPages();
+  return pages
+    .filter(page => page.slug !== 'home') // Exclude home page if handled separately
+    .map(page => ({
+      params: { slug: page.slug },
+    }));
+}
+
+const { slug } = Astro.params;
+const page = await getPage(slug);
+
+if (!page) {
+  return Astro.redirect('/404');
+}
+
+const imageUrl = getLocalFeaturedImageUrl(page);
+const content = rewriteContentUrls(page.content.rendered);
+---
+
+<BaseLayout title={page.title.rendered}>
+  <Header />
+  <main id="main-content" class="container mx-auto px-4 py-8 max-w-4xl bg-surface">
+    {imageUrl && (
+      <FeaturedImage 
+        src={imageUrl} 
+        alt={page.title.rendered}
+        width={1200}
+        height={630}
+        class="w-full h-64 object-cover rounded-lg mb-8"
+        priority={true}
+      />
+    )}
+    
+    <h1 class="text-4xl font-bold mb-8 text-content" set:html={page.title.rendered} />
+    
+    <div 
+      class="prose prose-lg max-w-none"
+      set:html={content}
+    />
+  </main>
+  <Footer />
+</BaseLayout>

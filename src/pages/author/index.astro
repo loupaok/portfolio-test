@@ -1,0 +1,42 @@
+---
+import { getUsers } from '../../lib/wordpress';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const users = await getUsers();
+---
+
+<BaseLayout title="Authors">
+  <Header />
+  <main id="main-content" class="container mx-auto px-4 py-8 bg-surface">
+    <h1 class="text-4xl font-bold mb-8 text-content">Authors</h1>
+    
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {users.map(user => (
+        <a href={`/author/${user.slug}`} class="flex items-center gap-4 bg-surface rounded-lg shadow-md border border-outline p-6 hover:shadow-lg transition-shadow cursor-pointer">
+          {user.avatar_urls?.['96'] && (
+            <img 
+              src={user.avatar_urls['96']} 
+              alt={user.name}
+              width={64}
+              height={64}
+              class="w-16 h-16 rounded-full"
+            />
+          )}
+          <div>
+            <h2 class="text-xl font-semibold text-content">{user.name}</h2>
+            {user.description && (
+              <p class="text-content-light text-sm line-clamp-2">{user.description}</p>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+    
+    {users.length === 0 && (
+      <p class="text-content-lighter text-center py-12">No authors found.</p>
+    )}
+  </main>
+  <Footer />
+</BaseLayout>

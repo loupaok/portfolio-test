@@ -1,0 +1,53 @@
+---
+import { getPosts, getFeaturedImageUrl, getAuthor, formatDate } from '../../lib/wordpress';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import FeaturedImage from '../../components/FeaturedImage.astro';
+
+const posts = await getPosts({ perPage: 10 });
+---
+
+<BaseLayout title="Blog">
+  <Header />
+  <main id="main-content" class="container mx-auto px-4 py-8 bg-surface">
+    <h1 class="text-4xl font-bold mb-8 text-content">Blog</h1>
+    
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {posts.map(post => {
+        const imageUrl = getFeaturedImageUrl(post, 'medium');
+        const author = getAuthor(post);
+        
+        return (
+          <article class="bg-surface rounded-lg shadow-md overflow-hidden border border-outline">
+            {imageUrl && (
+              <FeaturedImage 
+                src={imageUrl} 
+                alt={post.title.rendered}
+                width={400}
+                height={225}
+                class="w-full h-48 object-cover"
+              />
+            )}
+            <div class="p-6">
+              <h2 class="text-xl font-semibold mb-2">
+                <a href={`/blog/${post.slug}`} class="text-content hover:text-primary cursor-pointer">
+                  {post.title.rendered}
+                </a>
+              </h2>
+              <div class="text-content-lighter text-sm mb-3">
+                {author && <span>By {author.name} · </span>}
+                <time datetime={post.date}>{formatDate(post.date)}</time>
+              </div>
+              <div 
+                class="text-content-light line-clamp-3"
+                set:html={post.excerpt.rendered}
+              />
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

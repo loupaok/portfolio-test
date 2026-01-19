@@ -1,0 +1,41 @@
+---
+import { getCustomPostType, getLocalFeaturedImageUrl, formatDate } from '../../lib/wordpress';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import FeaturedImage from '../../components/FeaturedImage.astro';
+
+const items = await getCustomPostType('project');
+---
+
+<BaseLayout title="Projects">
+  <Header />
+  <main class="container mx-auto px-4 py-8 bg-surface">
+    <h1 class="text-4xl font-bold mb-8 text-content">Projects</h1>
+    
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {items.map(item => {
+        const itemImage = getLocalFeaturedImageUrl(item);
+        return (
+          <a href={`/project/${item.slug}`} class="block bg-surface rounded-lg shadow-md overflow-hidden border border-outline hover:shadow-lg transition-shadow cursor-pointer">
+            {itemImage && (
+              <FeaturedImage src={itemImage} alt={item.title?.rendered} width={400} height={225} class="w-full h-48 object-cover" />
+            )}
+            <div class="p-6">
+              <h2 class="text-xl font-semibold mb-2 text-content" set:html={item.title?.rendered} />
+              {item.date && <p class="text-content/50 text-sm mb-2">{formatDate(item.date)}</p>}
+              {item.excerpt?.rendered && (
+                <div class="text-content/70 line-clamp-3" set:html={item.excerpt.rendered} />
+              )}
+            </div>
+          </a>
+        );
+      })}
+    </div>
+    
+    {items.length === 0 && (
+      <p class="text-content/50 text-center py-12">No projects found.</p>
+    )}
+  </main>
+  <Footer />
+</BaseLayout>

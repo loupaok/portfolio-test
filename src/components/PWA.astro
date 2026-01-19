@@ -1,0 +1,57 @@
+---
+/**
+ * PWA Component - Include this in your BaseLayout's <head> section
+ * 
+ * Usage in BaseLayout.astro:
+ *   <head>
+ *     ...
+ *     <PWA />
+ *   </head>
+ * 
+ * Caching only activates when the app is installed (standalone mode).
+ * Regular website visitors won't experience aggressive caching.
+ */
+---
+<!-- PWA Meta Tags -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#3b82f6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="portfolio-te">
+<link rel="apple-touch-icon" href="/icons/icon-192.svg">
+
+<!-- Service Worker Registration -->
+<script is:inline>
+    if ('serviceWorker' in navigator) {
+        // Check if running as installed PWA (standalone mode)
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
+            || window.navigator.standalone === true;
+        
+        window.addEventListener('load', async () => {
+            try {
+                const reg = await navigator.serviceWorker.register('/sw.js');
+                console.log('[PWA] Service worker registered');
+                
+                // Tell the service worker if we're in standalone mode
+                // This enables caching only for installed apps
+                if (reg.active) {
+                    reg.active.postMessage({ type: 'SET_STANDALONE', isStandalone });
+                }
+                
+                // Also send when service worker becomes active
+                navigator.serviceWorker.ready.then((registration) => {
+                    registration.active?.postMessage({ type: 'SET_STANDALONE', isStandalone });
+                });
+                
+                // Listen for display mode changes (user installs/uninstalls)
+                window.matchMedia('(display-mode: standalone)').addEventListener('change', (e) => {
+                    navigator.serviceWorker.ready.then((registration) => {
+                        registration.active?.postMessage({ type: 'SET_STANDALONE', isStandalone: e.matches });
+                    });
+                });
+            } catch (err) {
+                console.error('[PWA] SW registration failed:', err);
+            }
+        });
+    }
+</script>

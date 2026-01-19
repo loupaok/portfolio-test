@@ -1,16 +1,22 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import sitemap from '@astrojs/sitemap';
-import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
-// Note: Set your 'site' URL in SEO Settings to enable sitemap generation
 export default defineConfig({
-  integrations: [mdx(), sitemap(), react()],
+  integrations: [mdx()],
   image: {
-    // Use Sharp for image optimization (converts to WebP/AVIF, resizes)
-    service: { entrypoint: 'astro/assets/services/sharp' },
+    // Allow images from WordPress (fallback if not downloaded locally)
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'webwork.lkouros.com',
+      },
+      {
+        protocol: 'http',
+        hostname: 'webwork.lkouros.com',
+      },
+    ],
   },
   vite: {
     plugins: [tailwindcss()],
@@ -22,12 +28,9 @@ export default defineConfig({
       },
       // HMR configuration for GitHub Codespaces
       hmr: {
-        // Use the same port as the dev server - Codespaces handles forwarding
         clientPort: 443,
-        // Force WebSocket protocol (wss in Codespaces)
         protocol: 'wss',
       },
-      // File watching configuration
       watch: {
         // Use native file watchers (faster than polling)
         // If you experience issues in containers, set usePolling: true

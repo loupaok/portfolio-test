@@ -1,0 +1,57 @@
+---
+import { getCategories, getCategoryBySlug, getPosts, getLocalFeaturedImageUrl, formatDate } from '../../lib/wordpress';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import FeaturedImage from '../../components/FeaturedImage.astro';
+
+export async function getStaticPaths() {
+  const categories = await getCategories();
+  return categories.map(cat => ({
+    params: { slug: cat.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const category = await getCategoryBySlug(slug);
+
+if (!category) {
+  return Astro.redirect('/404');
+}
+
+const allPosts = await getPosts({ perPage: 100 });
+const posts = allPosts.filter(post => post.categories?.includes(category.id));
+---
+
+<BaseLayout title={`${category.name} - Category`}>
+  <Header />
+  <main id="main-content" class="container mx-auto px-4 py-8 bg-surface">
+    <h1 class="text-4xl font-bold mb-8 text-content">{category.name}</h1>
+    {category.description && (
+      <p class="text-content-light mb-8">{category.description}</p>
+    )}
+    
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {posts.map(post => {
+        const postImage = getLocalFeaturedImageUrl(post);
+        return (
+          <a href={`/blog/${post.slug}`} class="block bg-surface rounded-lg shadow-md overflow-hidden border border-outline hover:shadow-lg transition-shadow cursor-pointer">
+            {postImage && (
+              <FeaturedImage src={postImage} alt={post.title.rendered} width={400} height={225} class="w-full h-48 object-cover" />
+            )}
+            <div class="p-6">
+              <h2 class="text-xl font-semibold mb-2 text-content" set:html={post.title.rendered} />
+              <p class="text-content-lighter text-sm mb-2">{formatDate(post.date)}</p>
+              <div class="text-content-light line-clamp-3" set:html={post.excerpt.rendered} />
+            </div>
+          </a>
+        );
+      })}
+    </div>
+    
+    {posts.length === 0 && (
+      <p class="text-content-lighter text-center py-12">No posts in this category yet.</p>
+    )}
+  </main>
+  <Footer />
+</BaseLayout>

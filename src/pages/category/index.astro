@@ -1,0 +1,33 @@
+---
+import { getCategories } from '../../lib/wordpress';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const categories = await getCategories();
+const nonEmptyCategories = categories.filter(cat => cat.count > 0);
+---
+
+<BaseLayout title="Categories">
+  <Header />
+  <main id="main-content" class="container mx-auto px-4 py-8 bg-surface">
+    <h1 class="text-4xl font-bold mb-8 text-content">Categories</h1>
+    
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {nonEmptyCategories.map(category => (
+        <a href={`/category/${category.slug}`} class="block bg-surface rounded-lg shadow-md border border-outline p-6 hover:shadow-lg transition-shadow cursor-pointer">
+          <h2 class="text-xl font-semibold mb-2 text-content">{category.name}</h2>
+          {category.description && (
+            <p class="text-content-light text-sm mb-3 line-clamp-2">{category.description}</p>
+          )}
+          <p class="text-content-lighter text-sm">{category.count} post{category.count !== 1 ? 's' : ''}</p>
+        </a>
+      ))}
+    </div>
+    
+    {nonEmptyCategories.length === 0 && (
+      <p class="text-content-lighter text-center py-12">No categories found.</p>
+    )}
+  </main>
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,85 @@
+---
+import { getAllPosts, getPost, getLocalFeaturedImageUrl, getAuthor, getPostCategories, formatDate, rewriteContentUrls } from '../../lib/wordpress';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import FeaturedImage from '../../components/FeaturedImage.astro';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  return posts.map(post => ({
+    params: { slug: post.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const post = await getPost(slug);
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+const imageUrl = getLocalFeaturedImageUrl(post);
+const author = getAuthor(post);
+const categories = getPostCategories(post);
+const content = rewriteContentUrls(post.content.rendered);
+---
+
+<BaseLayout title={post.title.rendered}>
+  <Header />
+  <article class="container mx-auto px-4 py-8 max-w-3xl bg-surface">
+    {imageUrl && (
+      <FeaturedImage 
+        src={imageUrl} 
+        alt={post.title.rendered}
+        width={1200}
+        height={630}
+        class="w-full h-64 md:h-96 object-cover rounded-lg mb-8"
+        priority={true}
+      />
+    )}
+    
+    <header class="mb-8">
+      <h1 class="text-4xl font-bold mb-4 text-content" set:html={post.title.rendered} />
+      
+      <div class="flex items-center gap-4 text-content-light">
+        {author && (
+          <div class="flex items-center gap-2">
+            {author.avatar_urls?.['48'] && (
+              <img 
+                src={author.avatar_urls['48']} 
+                alt={author.name}
+                width={32}
+                height={32}
+                loading="lazy"
+                decoding="async"
+                class="w-8 h-8 rounded-full"
+              />
+            )}
+            <span>{author.name}</span>
+          </div>
+        )}
+        <time datetime={post.date}>{formatDate(post.date)}</time>
+      </div>
+      
+      {categories.length > 0 && (
+        <div class="flex gap-2 mt-4">
+          {categories.map(cat => (
+            <a 
+              href={`/category/${cat.slug}`}
+              class="px-3 py-1 bg-surface-alt rounded-full text-sm hover:bg-surface-hover text-content-light cursor-pointer"
+            >
+              {cat.name}
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+    
+    <div 
+      class="prose prose-lg max-w-none"
+      set:html={content}
+    />
+  </article>
+  <Footer />
+</BaseLayout>
