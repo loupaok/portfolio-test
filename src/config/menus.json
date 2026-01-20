@@ -1,17 +1,23 @@
 {
   "menus": [
     {
-      "id": "main_default",
-      "name": "Main",
+      "id": "detected_main_1768817418943",
+      "name": "Main Menu",
       "slug": "main",
-      "items": [],
       "style": "horizontal",
-      "showHome": true,
+      "items": [
+        {
+          "type": "custom",
+          "label": "Test 2",
+          "url": "/test-2",
+          "id": "item_1768817439610_twjp8ionw"
+        }
+      ],
       "mobileHamburger": true,
       "autoSync": true,
       "excludedPages": []
     }
   ],
   "excludedPages": [],
-  "activeMenuId": "main_default"
+  "activeMenuId": "detected_main_1768817418943"
 }
