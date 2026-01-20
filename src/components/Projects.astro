@@ -1,0 +1,143 @@
+---
+// Sample project data - replace with your actual projects
+const projects = [
+  {
+    id: 1,
+    title: "Lightning Carousel",
+    description: "Clean layout, smooth transitions, dots + arrows + swipe, and a dynamic lightning/glow effect around the frame.",
+    image: "/images/project-1.jpg", // Replace with your actual image paths
+    category: "Premium UI",
+    buttons: [
+      { text: "View Project", url: "#", primary: true },
+      { text: "Learn More", url: "#", primary: false }
+    ]
+  },
+  {
+    id: 2,
+    title: "Modern Dashboard",
+    description: "Fully responsive dashboard with real-time data visualization and smooth animations.",
+    image: "/images/project-2.jpg",
+    category: "Web App",
+    buttons: [
+      { text: "View Project", url: "#", primary: true },
+      { text: "Learn More", url: "#", primary: false }
+    ]
+  },
+  {
+    id: 3,
+    title: "E-commerce Platform",
+    description: "Complete shopping experience with cart management, payment integration, and admin panel.",
+    image: "/images/project-3.jpg",
+    category: "Full Stack",
+    buttons: [
+      { text: "View Project", url: "#", primary: true },
+      { text: "Learn More", url: "#", primary: false }
+    ]
+  }
+];
+---
+
+<section class="py-20 bg-gray-900">
+  <div class="container mx-auto px-4">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+        Featured Projects
+      </h2>
+      <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+        Showcase of my latest work with modern design and cutting-edge technology
+      </p>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+      {projects.map((project) => (
+        <div class="group relative bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-blue-500/50 transition-all duration-500 hover:transform hover:scale-[1.02]">
+          <!-- Lightning Effect Border -->
+          <div class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/20 via-cyan-500/20 to-blue-500/20 blur-sm"></div>
+            <div class="absolute inset-[1px] rounded-2xl bg-gray-800/50 backdrop-blur-sm"></div>
+          </div>
+          
+          <div class="relative z-10">
+            <!-- Project Image -->
+            <div class="relative h-64 overflow-hidden">
+              <img 
+                src={project.image} 
+                alt={project.title}
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                loading="lazy"
+              />
+              <!-- Gradient Overlay -->
+              <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
+              
+              <!-- Category Badge -->
+              <div class="absolute top-4 left-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                  <div class="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
+                  {project.category}
+                </span>
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6">
+              <!-- Title -->
+              <h3 class="text-xl font-bold text-white mb-3 group-hover:text-blue-300 transition-colors duration-300">
+                {project.title}
+              </h3>
+              
+              <!-- Description -->
+              <p class="text-gray-300 mb-6 line-clamp-3">
+                {project.description}
+              </p>
+
+              <!-- Buttons -->
+              <div class="flex flex-wrap gap-3">
+                {project.buttons.map((button) => (
+                  <a 
+                    href={button.url}
+                    class={`
+                      inline-flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-300
+                      ${button.primary 
+                        ? 'bg-blue-600 hover:bg-blue-500 text-white hover:shadow-lg hover:shadow-blue-500/25' 
+                        : 'bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white border border-gray-600/50 hover:border-gray-500'
+                      }
+                    `}
+                  >
+                    {button.text}
+                    <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- View All Projects Button -->
+    <div class="text-center mt-12">
+      <a 
+        href="/projects" 
+        class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 hover:transform hover:scale-105"
+      >
+        View All Projects
+        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
