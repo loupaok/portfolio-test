@@ -5,7 +5,7 @@ const projects = [
     id: 1,
     title: "Lightning Carousel",
     description: "Clean layout, smooth transitions, dots + arrows + swipe, and a dynamic lightning/glow effect around the frame.",
-    image: "/images/project-1.jpg", // Replace with your actual image paths
+    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop&crop=entropy&cs=tinysrgb",
     category: "Premium UI",
     buttons: [
       { text: "View Project", url: "#", primary: true },
@@ -16,7 +16,7 @@ const projects = [
     id: 2,
     title: "Modern Dashboard",
     description: "Fully responsive dashboard with real-time data visualization and smooth animations.",
-    image: "/images/project-2.jpg",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&crop=entropy&cs=tinysrgb",
     category: "Web App",
     buttons: [
       { text: "View Project", url: "#", primary: true },
@@ -27,7 +27,7 @@ const projects = [
     id: 3,
     title: "E-commerce Platform",
     description: "Complete shopping experience with cart management, payment integration, and admin panel.",
-    image: "/images/project-3.jpg",
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop&crop=entropy&cs=tinysrgb",
     category: "Full Stack",
     buttons: [
       { text: "View Project", url: "#", primary: true },
@@ -67,6 +67,8 @@ const projects = [
                 alt={project.title}
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 loading="lazy"
+                width="800"
+                height="600"
               />
               <!-- Gradient Overlay -->
               <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>

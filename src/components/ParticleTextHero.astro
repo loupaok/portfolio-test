@@ -66,6 +66,7 @@ const {
 
 <script>
     import * as THREE from 'three';
+    import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
     
     const preload = () => {
         let manager = new THREE.LoadingManager();
@@ -84,7 +85,7 @@ const {
         };
 
         var typo = null;
-        const loader = new THREE.FontLoader(manager);
+        const loader = new FontLoader(manager);
         const font = loader.load(
             "https://res.cloudinary.com/dydre7amr/raw/upload/v1612950355/font_zsd4dr.json",
             function (font) {
