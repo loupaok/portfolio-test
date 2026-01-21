@@ -16,19 +16,19 @@
 
 @theme {
   /* Primary Colors - bg-primary, text-primary, border-primary, etc. */
-  --color-primary: #0ea5e9;
-  --color-primary-dark: #0087cb;
-  --color-primary-light: #2cc3ff;
+  --color-primary: #f97316;
+  --color-primary-dark: #db5500;
+  --color-primary-light: #ff9134;
   
   /* Secondary Colors - bg-secondary, text-secondary, border-secondary, etc. */
-  --color-secondary: #64748b;
-  --color-secondary-dark: #46566d;
-  --color-secondary-light: #8292a9;
+  --color-secondary: #78716c;
+  --color-secondary-dark: #5a534e;
+  --color-secondary-light: #968f8a;
   
   /* Accent Colors - bg-accent, text-accent (highlights, links, badges) */
-  --color-accent: #06b6d4;
-  --color-accent-dark: #0098b6;
-  --color-accent-light: #24d4f2;
+  --color-accent: #ef4444;
+  --color-accent-dark: #d12626;
+  --color-accent-light: #ff6262;
   
   /* Surface Colors - bg-surface, bg-surface-alt, bg-surface-hover */
   --color-surface: #ffffff;

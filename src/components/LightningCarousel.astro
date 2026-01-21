@@ -1,0 +1,359 @@
+---
+/**
+ * Lightning Carousel Component
+ * Clean layout, smooth transitions, dots + arrows + swipe, and a
+ * dynamic lightning/glow effect around the frame.
+ */
+
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  image: string;
+  buttons: {
+    primary: { text: string; href: string };
+    secondary: { text: string; href: string };
+  };
+}
+
+interface Props {
+  projects?: Project[];
+}
+
+const { projects = [] } = Astro.props;
+
+// Default projects if none provided
+const defaultProjects: Project[] = [
+  {
+    id: 1,
+    title: "Showcase your work with a clean, modern carousel.",
+    description: "Great for portfolios, landing pages, and product highlights. Fully responsive with smooth animation.",
+    category: "Premium UI",
+    image: "/api/placeholder/600/400",
+    buttons: {
+      primary: { text: "View Project", href: "#" },
+      secondary: { text: "Learn More", href: "#" }
+    }
+  },
+  {
+    id: 2,
+    title: "Interactive Design System",
+    description: "Comprehensive component library with modern design patterns and accessibility features.",
+    category: "Design System",
+    image: "/api/placeholder/600/400",
+    buttons: {
+      primary: { text: "Explore", href: "#" },
+      secondary: { text: "Documentation", href: "#" }
+    }
+  },
+  {
+    id: 3,
+    title: "E-commerce Platform",
+    description: "Full-featured online store with advanced filtering, payment integration, and analytics.",
+    category: "Web App",
+    image: "/api/placeholder/600/400",
+    buttons: {
+      primary: { text: "Live Demo", href: "#" },
+      secondary: { text: "Case Study", href: "#" }
+    }
+  }
+];
+
+const displayProjects = projects.length > 0 ? projects : defaultProjects;
+---
+
+<section class="py-20 bg-slate-900">
+  <div class="max-w-6xl mx-auto px-4">
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Lightning Carousel</h2>
+      <p class="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Clean layout, smooth transitions, dots + arrows + swipe, and a
+        dynamic lightning/glow effect around the frame.
+      </p>
+    </div>
+
+    <!-- Carousel Container -->
+    <div class="lightning-carousel-container relative">
+      <!-- Lightning Effect Border -->
+      <div class="lightning-border absolute inset-0 rounded-3xl pointer-events-none z-0"></div>
+      
+      <!-- Main Carousel -->
+      <div class="lightning-carousel relative bg-slate-800/50 backdrop-blur-sm rounded-3xl overflow-hidden p-8 z-10">
+        <!-- Slides Container -->
+        <div class="carousel-track flex transition-transform duration-500 ease-in-out" id="carouselTrack">
+          {displayProjects.map((project, index) => (
+            <div class="carousel-slide w-full flex-shrink-0 flex flex-col lg:flex-row gap-8 items-center" data-slide={index}>
+              <!-- Image -->
+              <div class="w-full lg:w-1/2">
+                <div class="aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500/20 to-purple-600/20 relative">
+                  <img 
+                    src={project.image} 
+                    alt={project.title}
+                    class="w-full h-full object-cover opacity-80"
+                    loading="lazy"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent"></div>
+                </div>
+              </div>
+
+              <!-- Content -->
+              <div class="w-full lg:w-1/2 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-sm font-medium mb-6">
+                  <div class="w-2 h-2 rounded-full bg-blue-400"></div>
+                  {project.category}
+                </div>
+                
+                <h3 class="text-3xl lg:text-4xl font-bold text-white mb-6 leading-tight">
+                  {project.title}
+                </h3>
+                
+                <p class="text-slate-300 text-lg leading-relaxed mb-8">
+                  {project.description}
+                </p>
+
+                <!-- Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <a 
+                    href={project.buttons.primary.href}
+                    class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25"
+                  >
+                    {project.buttons.primary.text}
+                  </a>
+                  <a 
+                    href={project.buttons.secondary.href}
+                    class="px-8 py-3 bg-transparent hover:bg-slate-700/50 text-slate-300 hover:text-white font-semibold rounded-xl border border-slate-600 hover:border-slate-500 transition-all duration-300"
+                  >
+                    {project.buttons.secondary.text}
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button 
+          id="prevBtn"
+          class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-slate-700/80 hover:bg-slate-600 text-white rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 z-30"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+
+        <button 
+          id="nextBtn"
+          class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-slate-700/80 hover:bg-slate-600 text-white rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 z-30"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Dots Navigation -->
+      <div class="flex justify-center gap-2 mt-8" id="dotsContainer">
+        {displayProjects.map((_, index) => (
+          <button 
+            class={`carousel-dot w-3 h-3 rounded-full transition-all duration-300 ${index === 0 ? 'bg-blue-500 w-8' : 'bg-slate-600 hover:bg-slate-500'}`}
+            data-slide={index}
+          ></button>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .lightning-border {
+    background: linear-gradient(90deg, 
+      transparent 0%,
+      rgba(59, 130, 246, 0.5) 25%,
+      rgba(147, 51, 234, 0.5) 50%,
+      rgba(59, 130, 246, 0.5) 75%,
+      transparent 100%
+    );
+    background-size: 400% 100%;
+    animation: lightning 3s ease-in-out infinite;
+    padding: 2px;
+    border-radius: 1.5rem;
+  }
+
+  .lightning-border::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: transparent;
+    border-radius: calc(1.5rem - 2px);
+    pointer-events: none;
+  }
+
+  @keyframes lightning {
+    0%, 100% {
+      background-position: 0% 50%;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+    50% {
+      background-position: 100% 50%;
+      box-shadow: 0 0 40px rgba(59, 130, 246, 0.5), 0 0 60px rgba(147, 51, 234, 0.3);
+    }
+  }
+
+  .lightning-carousel {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Swipe indicators */
+  .carousel-track {
+    touch-action: pan-y;
+  }
+
+  @media (max-width: 768px) {
+    .lightning-carousel {
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  class LightningCarousel {
+    constructor() {
+      this.currentSlide = 0;
+      this.totalSlides = document.querySelectorAll('.carousel-slide').length;
+      this.track = document.getElementById('carouselTrack');
+      this.dots = document.querySelectorAll('.carousel-dot');
+      this.prevBtn = document.getElementById('prevBtn');
+      this.nextBtn = document.getElementById('nextBtn');
+      
+      this.autoplayInterval = null;
+      this.autoplayDelay = 5000;
+      
+      // Touch/swipe handling
+      this.startX = 0;
+      this.endX = 0;
+      this.threshold = 50;
+      
+      this.init();
+    }
+
+    init() {
+      this.setupEventListeners();
+      this.updateCarousel();
+      this.startAutoplay();
+    }
+
+    setupEventListeners() {
+      // Arrow buttons
+      this.prevBtn?.addEventListener('click', () => this.previousSlide());
+      this.nextBtn?.addEventListener('click', () => this.nextSlide());
+      
+      // Dots navigation
+      this.dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => this.goToSlide(index));
+      });
+
+      // Touch/swipe events
+      this.track?.addEventListener('touchstart', (e) => {
+        this.startX = e.touches[0].clientX;
+        this.stopAutoplay();
+      });
+
+      this.track?.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+      });
+
+      this.track?.addEventListener('touchend', (e) => {
+        this.endX = e.changedTouches[0].clientX;
+        this.handleSwipe();
+        this.startAutoplay();
+      });
+
+      // Mouse events for desktop swipe
+      this.track?.addEventListener('mousedown', (e) => {
+        this.startX = e.clientX;
+        this.stopAutoplay();
+      });
+
+      this.track?.addEventListener('mouseup', (e) => {
+        this.endX = e.clientX;
+        this.handleSwipe();
+        this.startAutoplay();
+      });
+
+      // Pause autoplay on hover
+      const carousel = document.querySelector('.lightning-carousel');
+      carousel?.addEventListener('mouseenter', () => this.stopAutoplay());
+      carousel?.addEventListener('mouseleave', () => this.startAutoplay());
+    }
+
+    handleSwipe() {
+      const difference = this.startX - this.endX;
+      
+      if (Math.abs(difference) > this.threshold) {
+        if (difference > 0) {
+          this.nextSlide();
+        } else {
+          this.previousSlide();
+        }
+      }
+    }
+
+    nextSlide() {
+      this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+      this.updateCarousel();
+    }
+
+    previousSlide() {
+      this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+      this.updateCarousel();
+    }
+
+    goToSlide(index) {
+      this.currentSlide = index;
+      this.updateCarousel();
+      this.stopAutoplay();
+      this.startAutoplay();
+    }
+
+    updateCarousel() {
+      // Move track
+      const translateX = -this.currentSlide * 100;
+      if (this.track) {
+        this.track.style.transform = `translateX(${translateX}%)`;
+      }
+
+      // Update dots
+      this.dots.forEach((dot, index) => {
+        if (index === this.currentSlide) {
+          dot.classList.remove('bg-slate-600', 'hover:bg-slate-500', 'w-3');
+          dot.classList.add('bg-blue-500', 'w-8');
+        } else {
+          dot.classList.remove('bg-blue-500', 'w-8');
+          dot.classList.add('bg-slate-600', 'hover:bg-slate-500', 'w-3');
+        }
+      });
+    }
+
+    startAutoplay() {
+      this.stopAutoplay();
+      this.autoplayInterval = setInterval(() => {
+        this.nextSlide();
+      }, this.autoplayDelay);
+    }
+
+    stopAutoplay() {
+      if (this.autoplayInterval) {
+        clearInterval(this.autoplayInterval);
+        this.autoplayInterval = null;
+      }
+    }
+  }
+
+  // Initialize carousel when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new LightningCarousel();
+  });
+</script>
