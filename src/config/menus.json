@@ -1,23 +1,24 @@
 {
   "menus": [
     {
-      "id": "detected_main_1768817418943",
+      "id": "detected_main_1769078458880",
       "name": "Main Menu",
       "slug": "main",
       "style": "horizontal",
-      "items": [
-        {
-          "type": "custom",
-          "label": "Test 2",
-          "url": "/test-2",
-          "id": "item_1768817439610_twjp8ionw"
-        }
-      ],
+      "items": [],
       "mobileHamburger": true,
       "autoSync": true,
-      "excludedPages": []
+      "excludedPages": [
+        "/author",
+        "/category",
+        "/tag",
+        "/louk",
+        "/test-2",
+        "/projects",
+        "/home"
+      ]
     }
   ],
   "excludedPages": [],
-  "activeMenuId": "detected_main_1768817418943"
+  "activeMenuId": "detected_main_1769078458880"
 }

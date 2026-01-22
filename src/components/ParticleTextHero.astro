@@ -254,10 +254,10 @@ const {
             document.addEventListener("mousemove", this.onMouseMove.bind(this));
             document.addEventListener("mouseup", this.onMouseUp.bind(this));
             
-            // Touch events for mobile
-            document.addEventListener("touchstart", this.onTouchStart.bind(this), { passive: false });
-            document.addEventListener("touchmove", this.onTouchMove.bind(this), { passive: false });
-            document.addEventListener("touchend", this.onTouchEnd.bind(this));
+            // Touch events for mobile - use passive: true to allow scrolling
+            document.addEventListener("touchstart", this.onTouchStart.bind(this), { passive: true });
+            document.addEventListener("touchmove", this.onTouchMove.bind(this), { passive: true });
+            document.addEventListener("touchend", this.onTouchEnd.bind(this), { passive: true });
         }
 
         onMouseDown(event) {
@@ -283,7 +283,7 @@ const {
         }
         
         onTouchStart(event) {
-            event.preventDefault();
+            // Don't prevent default to allow scrolling
             const touch = event.touches[0];
             this.mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
             this.mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
@@ -301,14 +301,14 @@ const {
         }
         
         onTouchMove(event) {
-            event.preventDefault();
+            // Don't prevent default to allow scrolling
             const touch = event.touches[0];
             this.mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
             this.mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
         }
         
         onTouchEnd(event) {
-            event.preventDefault();
+            // Don't prevent default to allow scrolling
             this.buttom = false;
             this.data.ease = 0.05;
         }
@@ -587,8 +587,8 @@ const {
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        /* Optimize for touch */
-        touch-action: none;
+        /* Allow vertical scrolling while enabling horizontal pan for interaction */
+        touch-action: pan-y;
     }
     
     /* Mobile-specific cursor */
@@ -603,10 +603,10 @@ const {
         backdrop-filter: blur(10px);
     }
     
-    /* Prevent zoom on double tap on iOS */
+    /* Allow scrolling on mobile */
     @media screen and (max-width: 768px) {
         #magic {
-            touch-action: manipulation;
+            touch-action: pan-y;
         }
     }
     
